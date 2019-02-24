@@ -7,16 +7,9 @@
 //
 
 #import "Person.h"
+#import <objc/runtime.h>
 @implementation Person
 
 
--(void)function1 {
-    NSLog(@"----function1----");
-}
-
-+(void)classFunction1 {
-    NSLog(@"----classFunction1----");
-
-}
 
 @end

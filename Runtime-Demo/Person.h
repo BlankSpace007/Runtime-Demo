@@ -10,21 +10,8 @@
 
 
 @interface Person : NSObject
-//实例方法
--(void)function1;
 
--(void)function2:(NSString*)p1;
+@property(nonatomic,copy)NSString* name;
 
--(NSString*)function3;
-
--(NSString*)function4:(NSString*)p1;
-//类方法
-+(void)classFunction1;
-
-+(void)classFunction2:(NSString*)p1;
-
-+(NSString*)classFunction3;
-
-+(NSString*)classFunction4:(NSString*)p1;
 @end
 

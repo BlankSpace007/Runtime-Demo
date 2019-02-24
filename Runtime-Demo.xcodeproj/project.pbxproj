@@ -15,6 +15,7 @@
 		A1746B96221D049300524814 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1746B95221D049300524814 /* main.m */; };
 		A1746B9E221D04AF00524814 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = A1746B9D221D04AF00524814 /* Person.m */; };
 		A1746BCC221EA50900524814 /* Student.m in Sources */ = {isa = PBXBuildFile; fileRef = A1746BCB221EA50900524814 /* Student.m */; };
+		D98354CE222102A100F30134 /* Person+Actor.m in Sources */ = {isa = PBXBuildFile; fileRef = D98354CD222102A100F30134 /* Person+Actor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,8 @@
 		A1746B9D221D04AF00524814 /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		A1746BCA221EA50900524814 /* Student.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Student.h; sourceTree = "<group>"; };
 		A1746BCB221EA50900524814 /* Student.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Student.m; sourceTree = "<group>"; };
+		D98354CC222102A100F30134 /* Person+Actor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Person+Actor.h"; sourceTree = "<group>"; };
+		D98354CD222102A100F30134 /* Person+Actor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Person+Actor.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +75,8 @@
 				A1746BCB221EA50900524814 /* Student.m */,
 				A1746B9C221D04AF00524814 /* Person.h */,
 				A1746B9D221D04AF00524814 /* Person.m */,
+				D98354CC222102A100F30134 /* Person+Actor.h */,
+				D98354CD222102A100F30134 /* Person+Actor.m */,
 				A1746B8C221D048B00524814 /* Main.storyboard */,
 				A1746B8F221D049300524814 /* Assets.xcassets */,
 				A1746B91221D049300524814 /* LaunchScreen.storyboard */,
@@ -153,6 +158,7 @@
 			files = (
 				A1746B8B221D048B00524814 /* ViewController.m in Sources */,
 				A1746B96221D049300524814 /* main.m in Sources */,
+				D98354CE222102A100F30134 /* Person+Actor.m in Sources */,
 				A1746BCC221EA50900524814 /* Student.m in Sources */,
 				A1746B9E221D04AF00524814 /* Person.m in Sources */,
 				A1746B88221D048A00524814 /* AppDelegate.m in Sources */,

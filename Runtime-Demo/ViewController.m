@@ -10,7 +10,10 @@
 #import <objc/runtime.h>
 #import "Person.h"
 #import "Student.h"
+#import "Person+Actor.h"
 @interface ViewController ()
+
+@property(nonatomic, strong)Person* person;
 
 @end
 
@@ -18,13 +21,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    [self getInstanceMethod];
-//    [self getClassMethod];
-//    [self getMethodImplementation];
-//    [self copyMethodList];
-//    [self addMethod];
+    //test class function
 //    [self getName];
-    
+    [self createInstance];
 //    [self getClass];
 //    [self isMetaClass];
 //    [self getClassWithObjc];
@@ -34,9 +33,13 @@
 //    [self getClassList];
 //    [self getInstanceSize];
 //    [self isClass];
-    
-    [self version];
+//    [self version];
+    //test category function
+//    [self testCategory];
+
 }
+
+#pragma mark - Class
 -(void)version {
     int verson = class_getVersion(objc_getClass("Person"));
     NSLog(@"version = %d",verson);
@@ -127,8 +130,12 @@
 
 -(void)getName {
     const char* name = class_getName([Person class]);
-    NSString* nameStr = [NSString stringWithUTF8String:name];
-    NSLog(@"nameStr=%@",nameStr);
+    NSLog(@"name = %s",name);
+}
+
+-(void)createInstance {
+    Person* person = class_createInstance(objc_getClass("Person"), 0);
+    NSLog(@"%@",person);
 }
 
 -(void)getClass {
@@ -151,46 +158,21 @@
 }
 
 
-- (void)getInstanceMethod {
-    //获得实例方法
-    SEL selector = NSSelectorFromString(@"function1");
-    Method method = class_getInstanceMethod([Person class], selector);
-    [self logMethodDescription:method];
-}
-
-- (void)getClassMethod {
-    //获得类方法
-    SEL selector = NSSelectorFromString(@"classFunction1");
-    Method method = class_getClassMethod([Person class], selector);
-    [self logMethodDescription:method];
+#pragma mark - category
+-(void)testCategory {
+    _person = [Person new];
+    _person.actingSkill = 0.1;
+    NSLog(@"actingSkill = %f",_person.actingSkill);
 }
 
 
--(void)getMethodImplementation {
-    IMP imp = class_getMethodImplementation([Person class], NSSelectorFromString(@"function1"));
-    imp();
-}
-
--(void)copyMethodList {
-    unsigned int count = 0;
-    Method* methodList = class_copyMethodList([Person class], &count);
-    for (int i = 0; i < count; i++) {
-        Method method = methodList[i];
-        [self logMethodDescription:method];
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
+    if (_person) {
+        objc_removeAssociatedObjects(_person);
+        NSLog(@"actingSkill2 = %f",_person.actingSkill);
     }
-    free(methodList);
+
 }
 
--(void)addMethod {
-    NSString* types = @"v16@0:8";
-    BOOL isSuccess = class_addMethod([Person class], NSSelectorFromString(@"newFunction1"), class_getMethodImplementation([Person class], NSSelectorFromString(@"function1")), [types UTF8String]);
-    NSLog(@"isSuccess=%d",isSuccess);
-}
-
--(void)logMethodDescription:(Method)method {
-    struct objc_method_description * description =  method_getDescription(method);
-    SEL selector = description->name;
-    char* types = description->types;
-    NSLog(@"selector=%@,type=%@",NSStringFromSelector(selector),[NSString stringWithUTF8String:types]);
-}
 @end
