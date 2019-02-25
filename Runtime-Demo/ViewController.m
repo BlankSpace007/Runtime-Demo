@@ -11,6 +11,7 @@
 #import "Person.h"
 #import "Student.h"
 #import "Person+Actor.h"
+#import "Car.h"
 @interface ViewController ()
 
 @property(nonatomic, strong)Person* person;
@@ -23,7 +24,7 @@
     [super viewDidLoad];
     //test class function
 //    [self getName];
-    [self createInstance];
+//    [self createInstance];
 //    [self getClass];
 //    [self isMetaClass];
 //    [self getClassWithObjc];
@@ -36,7 +37,15 @@
 //    [self version];
     //test category function
 //    [self testCategory];
-
+    //test method
+//    [self getMethod];
+//    [self getMethodImplementation];
+//    [self copyMethodList];
+//    [self setImplementation];
+//    [self getSEL];
+//    [self getType];
+//    [self addMethod];
+    [self exchangeImplementations];
 }
 
 #pragma mark - Class
@@ -172,7 +181,151 @@
         objc_removeAssociatedObjects(_person);
         NSLog(@"actingSkill2 = %f",_person.actingSkill);
     }
+}
 
+#pragma mark - Method
+-(void)logMethodDescription:(Method)method {
+    if (method) {
+        struct objc_method_description * description = method_getDescription(method);
+        SEL selector = description->name;
+        char* types = description->types;
+        NSLog(@"selector=%s,type=%s", sel_getName(selector),types);
+    } else {
+        NSLog(@"Method 为 null");
+    }
+}
+
+- (void)getMethod {
+    //获取function1
+    SEL selector = sel_registerName("function1");
+    Method method = class_getInstanceMethod(objc_getClass("Car"), selector);
+    [self logMethodDescription:method];
+    
+    //获取function1
+    SEL selector1 = sel_registerName("function2");
+    Method method1 = class_getInstanceMethod(objc_getClass("Car"), selector1);
+    [self logMethodDescription:method1];
+    
+    //获取function1_class
+    SEL selector2 = sel_registerName("function1_class");
+    Method method2 = class_getInstanceMethod(objc_getMetaClass("Car"), selector2);
+    [self logMethodDescription:method2];
+    
+    //获取function2_class
+    SEL selector3 = sel_registerName("function2_class");
+    Method method3 = class_getInstanceMethod(objc_getMetaClass("Car"), selector3);
+    [self logMethodDescription:method3];
+}
+-(void)getMethodImplementation {
+    IMP imp1 = class_getMethodImplementation(objc_getClass("Car"), sel_registerName("function1"));
+    imp1();
+    
+    IMP imp2 = class_getMethodImplementation(objc_getMetaClass("Car"), sel_registerName("function1_class"));
+    imp2();
+    
+    Method method1 = class_getInstanceMethod(objc_getClass("Car"), sel_registerName("function1"));
+    IMP imp3 = method_getImplementation(method1);
+    imp3();
+    
+    Method method2 = class_getInstanceMethod(objc_getMetaClass("Car"), sel_registerName("function1_class"));
+    IMP imp4 = method_getImplementation(method2);
+    imp4();
+    
+}
+
+-(void)copyMethodList {
+    unsigned int count1 ;
+    Method* instanceMethods = class_copyMethodList(objc_getClass("Car"), &count1);
+    
+    unsigned int count2 ;
+    Method* classMethods = class_copyMethodList(objc_getMetaClass("Car"), &count2);
+    NSLog(@"--------------------------");
+    for (unsigned int i = 0; i < count1; i++) {
+        Method method = instanceMethods[i];
+        [self logMethodDescription:method];
+    }
+    NSLog(@"--------------------------");
+
+    for (unsigned int i = 0; i < count1; i++) {
+        Method method = classMethods[i];
+        [self logMethodDescription:method];
+    }
+    
+    free(instanceMethods);
+    free(classMethods);
+
+}
+
+-(void)setImplementation {
+    Method method = class_getClassMethod(objc_getMetaClass("Car"), sel_registerName("function1_class"));
+    IMP imp = class_getMethodImplementation(objc_getClass("Car"), sel_registerName("function1"));
+    
+    IMP oldIMP = method_setImplementation(method, imp);
+    
+    oldIMP();
+    
+    IMP newIMP = method_getImplementation(method);
+    
+    newIMP();
+}
+
+-(void)getSEL {
+    Method method = class_getClassMethod(objc_getMetaClass("Car"), sel_registerName("function1_class"));
+    SEL sel = method_getName(method);
+    NSLog(@"sel = %s",sel_getName(sel));
+}
+
+-(void)getType {
+    Method method = class_getInstanceMethod(objc_getClass("Car"), sel_registerName("function1"));
+    const char* type = method_getTypeEncoding(method);
+    NSLog(@"type = %s",type);
+    
+    int count  = method_getNumberOfArguments(method);
+    NSLog(@"count = %d",count);
+
+    char* returnChar = method_copyReturnType(method);
+    NSLog(@"returnChar = %s",returnChar);
+    
+    for (int i = 0; i < count; i++) {
+        char* argumentType = method_copyArgumentType(method,i);
+        NSLog(@"第%d个参数类型为%s",i,argumentType);
+    }
+    
+    char dst[2] = {};
+    method_getReturnType(method,dst,2);
+    NSLog(@"returnType = %s",dst);
+    
+    
+    for (int i = 0; i < count; i++) {
+        char dst2[2] = {};
+        method_getArgumentType(method,i,dst2,2);
+        NSLog(@"第%d个参数类型为%s",i,dst2);
+    }
+    
+}
+
+-(void)addMethod {
+    IMP imp = class_getMethodImplementation(objc_getClass("Car"), sel_registerName("function1"));
+    //v@: 无参数，无返回值
+    BOOL addSuccess = class_addMethod(objc_getClass("Car"), sel_registerName("test"), imp, "v@:");
+    NSLog(@"增加不存在的方法 = %d",addSuccess);
+    
+    BOOL addSuccess2 = class_addMethod(objc_getClass("Car"), sel_registerName("function1"), imp, "v@:");
+    NSLog(@"增加已存在的方法 = %d",addSuccess2);
+}
+
+-(void)exchangeImplementations {
+    Method method1 = class_getInstanceMethod(objc_getClass("Car"), sel_registerName("function1"));
+    Method method2 = class_getInstanceMethod(objc_getClass("Car"), sel_registerName("function3"));
+    //交换方法
+    method_exchangeImplementations(method1, method2);
+    //此时的function1的实现应该是`function3`的实现
+    IMP imp1 = method_getImplementation(method1);
+    //此时的function3的实现应该是`function1`的实现
+    IMP imp2 = method_getImplementation(method2);
+
+    imp1();
+    imp2();
 }
 
 @end
