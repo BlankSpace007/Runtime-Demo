@@ -53,7 +53,9 @@
 //    [self getTypeEncoding];
 //    [self setIvar];
 //    [self getIvarValue];
-    [self getOffset];
+//    [self getOffset];
+//    [self ivarLayout];
+    [self addIvar];
     
 }
 
@@ -401,6 +403,31 @@
         NSLog(@"%s = %td",ivar_getName(ivar),offset);
     }
     free(ivars);
+    NSLog(@"Cat总字节 = %lu",class_getInstanceSize(objc_getClass("Cat")));
 }
 
+-(void)ivarLayout {
+    const uint8_t* layouts = class_getIvarLayout(objc_getClass("Cat"));
+    int i = 0;
+    while (1) {
+        uint8_t layout =  layouts[i];
+        NSLog(@"%d",layout);
+        i++;
+        if (i == 10) {
+            break;
+        }
+    }
+    
+}
+
+
+-(void)addIvar {
+    Class class = objc_allocateClassPair(objc_getClass("NSObject"), "Dog", 0);
+    float alignment = log2f(sizeof(int));
+    class_addIvar(class, "age", sizeof(int), alignment, "int");
+    objc_registerClassPair(class);
+    Ivar ivar = class_getInstanceVariable(class, "age");
+    NSLog(@"name = %s",ivar_getName(ivar));
+    NSLog(@"size = %zu",class_getInstanceSize(objc_getClass("Dog")));
+}
 @end

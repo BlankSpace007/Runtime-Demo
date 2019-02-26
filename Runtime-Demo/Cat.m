@@ -16,10 +16,4 @@
 @end
 @implementation Cat
 
--(void)dealloc {
-    
-
-}
-
-
 @end

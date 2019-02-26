@@ -20,7 +20,6 @@
 
 @property(nonatomic, copy)NSString* style;
 
-
 @end
 
 
