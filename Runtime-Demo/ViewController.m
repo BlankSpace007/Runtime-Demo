@@ -12,6 +12,7 @@
 #import "Student.h"
 #import "Person+Actor.h"
 #import "Car.h"
+#import "Cat.h"
 @interface ViewController ()
 
 @property(nonatomic, strong)Person* person;
@@ -45,7 +46,14 @@
 //    [self getSEL];
 //    [self getType];
 //    [self addMethod];
-    [self exchangeImplementations];
+//    [self exchangeImplementations];
+    //test ivar
+//    [self getIvar];
+//    [self copyIvarList];
+//    [self getTypeEncoding];
+    [self setIvar];
+//    [self getIvarValue];
+    
 }
 
 #pragma mark - Class
@@ -327,5 +335,62 @@
     imp1();
     imp2();
 }
+#pragma mark - Ivar
+-(void)logIvarName:(Ivar)ivar {
+    if (ivar) {
+        const char* name = ivar_getName(ivar);
+        NSLog(@"name = %s",name);
+    } else {
+        NSLog(@"ivar为null");
+    }
+}
+
+-(void)getIvar {
+    Ivar ivar = class_getInstanceVariable(objc_getClass("Cat"), "_name");
+    Ivar ivar1 = class_getInstanceVariable(objc_getClass("Cat"), "_age");
+    [self logIvarName:ivar];
+    [self logIvarName:ivar1];
+}
+
+
+-(void)copyIvarList {
+    unsigned int count;
+    Ivar* ivars =class_copyIvarList(objc_getClass("Cat"), &count);
+    for (unsigned int i = 0; i < count; i++) {
+        Ivar ivar = ivars[i];
+        [self logIvarName:ivar];
+    }
+    free(ivars);
+}
+
+-(void)getTypeEncoding {
+    Ivar ivar = class_getInstanceVariable(objc_getClass("Cat"), "_name");
+    const char* type = ivar_getTypeEncoding(ivar);
+    NSLog(@"type = %s",type);
+}
+
+-(void)getIvarValue {
+    Cat* cat = [Cat new];
+    Ivar ivar = class_getInstanceVariable(objc_getClass("Cat"), "_name");
+    NSString* name = object_getIvar(cat, ivar);
+    NSLog(@"赋值前：%@",name);
+    cat.name = @"jack";
+    NSString* name2 = object_getIvar(cat, ivar);
+    NSLog(@"赋值后：%@",name2);
+}
+
+
+
+-(void)setIvar {
+    Cat* cat = [Cat new];
+    Ivar ivar = class_getInstanceVariable(objc_getClass("Cat"), "_breed");
+    Ivar ivar2 = class_getInstanceVariable(objc_getClass("Cat"), "_style");
+    object_setIvar(cat, ivar,@"英短");
+    object_setIvar(cat, ivar2,@"活泼");
+    NSLog(@"breed = %@",cat.breed);
+    NSLog(@"style = %@",cat.style);
+}
+
+
 
 @end
