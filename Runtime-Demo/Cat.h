@@ -10,10 +10,9 @@
 #import "Car.h"
 @interface Cat : NSObject
 {
-//    @public
-//    int _age;
-//
-//    Car* car;
+    @public
+    int _age;
+
 }
 @property(nonatomic, copy)NSString* name;
 

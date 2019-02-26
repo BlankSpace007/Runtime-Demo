@@ -51,8 +51,9 @@
 //    [self getIvar];
 //    [self copyIvarList];
 //    [self getTypeEncoding];
-    [self setIvar];
+//    [self setIvar];
 //    [self getIvarValue];
+    [self getOffset];
     
 }
 
@@ -391,6 +392,15 @@
     NSLog(@"style = %@",cat.style);
 }
 
-
+-(void)getOffset {
+    unsigned int count;
+    Ivar* ivars =class_copyIvarList(objc_getClass("Cat"), &count);
+    for (unsigned int i = 0; i < count; i++) {
+        Ivar ivar = ivars[i];
+        ptrdiff_t offset = ivar_getOffset(ivar);
+        NSLog(@"%s = %td",ivar_getName(ivar),offset);
+    }
+    free(ivars);
+}
 
 @end
