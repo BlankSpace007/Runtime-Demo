@@ -47,6 +47,7 @@
 		A1746C9F2226675F00524814 /* Lion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lion.m; sourceTree = "<group>"; };
 		D98354CC222102A100F30134 /* Person+Actor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Person+Actor.h"; sourceTree = "<group>"; };
 		D98354CD222102A100F30134 /* Person+Actor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Person+Actor.m"; sourceTree = "<group>"; };
+		D9F5FFCB2226C100005DF771 /* PlayProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +80,7 @@
 		A1746B85221D048A00524814 /* Runtime-Demo */ = {
 			isa = PBXGroup;
 			children = (
+				D9F5FFCB2226C100005DF771 /* PlayProtocol.h */,
 				A1746B86221D048A00524814 /* AppDelegate.h */,
 				A1746B87221D048A00524814 /* AppDelegate.m */,
 				A1746B89221D048A00524814 /* ViewController.h */,

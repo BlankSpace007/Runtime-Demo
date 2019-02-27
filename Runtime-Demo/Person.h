@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PlayProtocol.h"
 
-
-@interface Person : NSObject
+@interface Person : NSObject<PlayProtocol>
 
 @property(nonatomic,copy)NSString* name;
 

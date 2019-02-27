@@ -63,7 +63,9 @@
 //    [self copyAttributeValue];
 //    [self addProperty];
 //    [self replaceProperty];
-    [self getIvarLayout];
+//    [self getIvarLayout];
+    //test protocol
+    [self protocolCommen];
 }
 
 #pragma mark - Class
@@ -554,7 +556,16 @@
         printf("weakLayout = #%02x\n",byte);
     }
 }
-
+#pragma mark - protocol
+-(void)protocolCommen {
+    Protocol *protocol = objc_getProtocol("PlayProtocol");
+    if (protocol) {
+        const char* name = protocol_getName(protocol);
+        NSLog(@"name = %s",name);
+    }else {
+        NSLog(@"不存在该协议");
+    }
+}
 
 
 @end
