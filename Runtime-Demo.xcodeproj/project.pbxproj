@@ -18,6 +18,7 @@
 		A1746BFB2223932A00524814 /* Car.m in Sources */ = {isa = PBXBuildFile; fileRef = A1746BFA2223932A00524814 /* Car.m */; };
 		A1746BFE2224CAC700524814 /* Cat.m in Sources */ = {isa = PBXBuildFile; fileRef = A1746BFD2224CAC700524814 /* Cat.m */; };
 		A1746C012224DF5700524814 /* Test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1746BFF2224DF5700524814 /* Test.cpp */; };
+		A1746CA02226675F00524814 /* Lion.m in Sources */ = {isa = PBXBuildFile; fileRef = A1746C9F2226675F00524814 /* Lion.m */; };
 		D98354CE222102A100F30134 /* Person+Actor.m in Sources */ = {isa = PBXBuildFile; fileRef = D98354CD222102A100F30134 /* Person+Actor.m */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,8 @@
 		A1746BFD2224CAC700524814 /* Cat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Cat.m; sourceTree = "<group>"; };
 		A1746BFF2224DF5700524814 /* Test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Test.cpp; sourceTree = "<group>"; };
 		A1746C002224DF5700524814 /* Test.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Test.hpp; sourceTree = "<group>"; };
+		A1746C9E2226675F00524814 /* Lion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lion.h; sourceTree = "<group>"; };
+		A1746C9F2226675F00524814 /* Lion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lion.m; sourceTree = "<group>"; };
 		D98354CC222102A100F30134 /* Person+Actor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Person+Actor.h"; sourceTree = "<group>"; };
 		D98354CD222102A100F30134 /* Person+Actor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Person+Actor.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -92,6 +95,8 @@
 				A1746BFD2224CAC700524814 /* Cat.m */,
 				A1746BF92223932A00524814 /* Car.h */,
 				A1746BFA2223932A00524814 /* Car.m */,
+				A1746C9E2226675F00524814 /* Lion.h */,
+				A1746C9F2226675F00524814 /* Lion.m */,
 				A1746B8C221D048B00524814 /* Main.storyboard */,
 				A1746B8F221D049300524814 /* Assets.xcassets */,
 				A1746B91221D049300524814 /* LaunchScreen.storyboard */,
@@ -176,6 +181,7 @@
 				A1746B8B221D048B00524814 /* ViewController.m in Sources */,
 				A1746B96221D049300524814 /* main.m in Sources */,
 				D98354CE222102A100F30134 /* Person+Actor.m in Sources */,
+				A1746CA02226675F00524814 /* Lion.m in Sources */,
 				A1746BCC221EA50900524814 /* Student.m in Sources */,
 				A1746BFB2223932A00524814 /* Car.m in Sources */,
 				A1746B9E221D04AF00524814 /* Person.m in Sources */,

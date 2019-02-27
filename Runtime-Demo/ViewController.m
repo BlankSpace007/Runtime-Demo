@@ -55,8 +55,15 @@
 //    [self getIvarValue];
 //    [self getOffset];
 //    [self ivarLayout];
-    [self addIvar];
-    
+//    [self addIvar];
+    //test property
+//    [self getProperty];
+//    [self copyPropertyList];
+//    [self getAttributes];
+//    [self copyAttributeValue];
+//    [self addProperty];
+//    [self replaceProperty];
+    [self getIvarLayout];
 }
 
 #pragma mark - Class
@@ -430,4 +437,124 @@
     NSLog(@"name = %s",ivar_getName(ivar));
     NSLog(@"size = %zu",class_getInstanceSize(objc_getClass("Dog")));
 }
+
+#pragma mark - property
+-(void)logProperty:(objc_property_t)property {
+    NSLog(@"-------------------");
+    unsigned int count;
+    objc_property_attribute_t* attributeList = property_copyAttributeList(property, &count);
+    for (unsigned int i = 0; i < count; i++) {
+       objc_property_attribute_t attribute = attributeList[i];
+        NSLog(@"name = %s",attribute.name);
+        NSLog(@"value = %s",attribute.value);
+    }
+}
+
+-(void)getProperty {
+    objc_property_t property = class_getProperty(objc_getClass("Cat"), "name");
+    [self logProperty:property];
+}
+
+-(void)copyPropertyList {
+    unsigned int count;
+    objc_property_t* propertyList = class_copyPropertyList(objc_getClass("Cat"), &count);
+    for (unsigned int i = 0; i < count; i++) {
+        objc_property_t property = propertyList[i];
+        NSLog(@"name = %s",property_getName(property));
+    }
+    free(propertyList);
+}
+
+-(void)getAttributes {
+    objc_property_t property = class_getProperty(objc_getClass("Cat"), "name");
+    const char* attributes = property_getAttributes(property);
+    NSLog(@"attributes = %s",attributes);
+}
+
+
+-(void)copyAttributeValue {
+    objc_property_t property = class_getProperty(objc_getClass("Cat"), "name");
+    //V我们已知是属性所代表的ivar的名字，看打印是否是ivar
+    char* value = property_copyAttributeValue(property,"V");
+    NSLog(@"value = %s",value);
+}
+
+-(void)addProperty {
+    unsigned int count = 5;
+    objc_property_attribute_t attributeList[count];
+    objc_property_attribute_t attribute1 ;
+    attribute1.name = "T";
+    attribute1.value = "NSString";
+    objc_property_attribute_t attribute2 ;
+    attribute2.name = "V";
+    attribute2.value = "_mood";
+    objc_property_attribute_t attribute3 ;
+    attribute3.name = "N";
+    attribute3.value = "";
+    objc_property_attribute_t attribute4 ;
+    attribute4.name = "C";
+    attribute4.value = "";
+    objc_property_attribute_t attribute5 ;
+    attribute5.name = "R";
+    attribute5.value = "";
+    attributeList[0] = attribute1;
+    attributeList[1] = attribute2;
+    attributeList[2] = attribute3;
+    attributeList[3] = attribute4;
+    attributeList[4] = attribute5;
+    
+    BOOL isSuccess = class_addProperty(objc_getClass("Cat"), "mood", (const objc_property_attribute_t *)&attributeList, count);
+    NSLog(@"新增%@",isSuccess?@"成功":@"失败");
+    
+    [self copyPropertyList];
+    
+    objc_property_t property = class_getProperty(objc_getClass("Cat"), "mood");
+    const char* attributes = property_getAttributes(property);
+    NSLog(@"attributes = %s",attributes);
+}
+
+-(void)replaceProperty {
+    unsigned int count = 4;
+    objc_property_attribute_t attributeList[count];
+    objc_property_attribute_t attribute1 ;
+    attribute1.name = "T";
+    attribute1.value = "NSString";
+    objc_property_attribute_t attribute2 ;
+    attribute2.name = "V";
+    attribute2.value = "_mood";
+    objc_property_attribute_t attribute3 ;
+    attribute3.name = "N";
+    attribute3.value = "";
+    objc_property_attribute_t attribute4 ;
+    attribute4.name = "C";
+    attribute4.value = "";
+    attributeList[0] = attribute1;
+    attributeList[1] = attribute2;
+    attributeList[2] = attribute3;
+    attributeList[3] = attribute4;
+
+    class_replaceProperty(objc_getClass("Cat"), "name", (const objc_property_attribute_t*)&attributeList, count);
+    [self copyPropertyList];
+
+    objc_property_t property = class_getProperty(objc_getClass("Cat"), "name");
+    const char* attributes = property_getAttributes(property);
+    NSLog(@"attributes = %s",attributes);
+    
+}
+
+-(void)getIvarLayout {
+   const uint8_t *strongLayout =   class_getIvarLayout(objc_getClass("Lion"));
+    uint8_t byte;
+    while ((byte = *strongLayout++)) {
+        printf("strongLayout = #%02x\n",byte);
+    }
+    
+    const uint8_t *weakLayout =   class_getWeakIvarLayout(objc_getClass("Lion"));
+    while ((byte = *weakLayout++)) {
+        printf("weakLayout = #%02x\n",byte);
+    }
+}
+
+
+
 @end
