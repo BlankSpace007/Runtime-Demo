@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SingProtocol.h"
 
-
-@protocol PlayProtocol <NSObject>
+@protocol PlayProtocol <SingProtocol>
 
 
 @end

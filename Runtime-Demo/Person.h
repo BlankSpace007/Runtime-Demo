@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "PlayProtocol.h"
-
-@interface Person : NSObject<PlayProtocol>
+#import "EatProtocol.h"
+@interface Person : NSObject<PlayProtocol,EatProtocol>
 
 @property(nonatomic,copy)NSString* name;
 

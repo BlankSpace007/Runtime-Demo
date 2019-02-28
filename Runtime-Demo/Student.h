@@ -8,10 +8,10 @@
 
 #import "Person.h"
 
-NS_ASSUME_NONNULL_BEGIN
 
 @interface Student : Person
 
+//@property(nonatomic, copy, class)NSString* name;
+
 @end
 
-NS_ASSUME_NONNULL_END

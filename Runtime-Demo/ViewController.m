@@ -65,7 +65,18 @@
 //    [self replaceProperty];
 //    [self getIvarLayout];
     //test protocol
-    [self protocolCommen];
+//    [self protocolCommen];
+//    [self conformsToProtocol];
+//    [self isEqual];
+//    [self isEqual2];
+//    [self getMethodDescription];
+//    [self copyMethodDescriptionList];
+//    [self getProperty_Protocol];
+//    [self copyPropertyList_protocol];
+//    [self conformsToProtocol_class];
+//    [self copyProtocolList];
+//    [self copyProtocolList_class];
+    [self copyProtocolList_objc];
 }
 
 #pragma mark - Class
@@ -362,6 +373,7 @@
     Ivar ivar1 = class_getInstanceVariable(objc_getClass("Cat"), "_age");
     [self logIvarName:ivar];
     [self logIvarName:ivar1];
+
 }
 
 
@@ -568,4 +580,190 @@
 }
 
 
+-(void)conformsToProtocol {
+    Protocol* playProtocol = objc_getProtocol("PlayProtocol");
+    Protocol* singProtocol = objc_getProtocol("SingProtocol");
+
+    BOOL isConform = protocol_conformsToProtocol(playProtocol, singProtocol);
+    NSLog(@"PlayProtocol协议  %@ SingProtocol协议",isConform?@"遵循":@"不遵循");
+    BOOL isConform2 = protocol_conformsToProtocol(singProtocol, playProtocol);
+    NSLog(@"SingProtocol协议  %@ PlayProtocol协议",isConform2?@"遵循":@"不遵循");
+
+}
+
+-(void)isEqual {
+    Protocol* playProtocol = objc_getProtocol("PlayProtocol");
+    Protocol* runProtocol = objc_getProtocol("SingProtocol");
+    BOOL isEqual = protocol_isEqual(playProtocol, runProtocol);
+    NSLog(@"%@",isEqual?@"相等":@"不相等");
+}
+
+-(void)isEqual2 {
+    Protocol* playProtocol1 = objc_getProtocol("PlayProtocol");
+    NSLog(@"playProtocol1 = %@",playProtocol1);
+    Protocol* playProtocol2 = objc_getProtocol("PlayProtocol");
+    NSLog(@"playProtocol2 = %@",playProtocol2);
+    BOOL isEqual = protocol_isEqual(playProtocol1, playProtocol2);
+    NSLog(@"%@",isEqual?@"相等":@"不相等");
+}
+
+-(void)getMethodDescription  {
+    Protocol* singProtocol = objc_getProtocol("SingProtocol");
+    struct objc_method_description method =  protocol_getMethodDescription(singProtocol, sel_registerName("singFolkSongs"), YES, YES);
+    NSLog(@"singFolkSongs方法 name = %s,types = %s", sel_getName(method.name)  ,method.types);
+    
+    struct objc_method_description method1 =  protocol_getMethodDescription(singProtocol, sel_registerName("singRockSongs"), YES, NO);
+    NSLog(@"singRockSongs方法 name = %s,types = %s", sel_getName(method1.name)  ,method1.types);
+    
+    struct objc_method_description method2 =  protocol_getMethodDescription(singProtocol, sel_registerName("singPopularSongs"), NO, YES);
+    NSLog(@"singPopularSongs方法 name = %s,types = %s", sel_getName(method2.name)  ,method2.types);
+    
+    struct objc_method_description method3 =  protocol_getMethodDescription(singProtocol, sel_registerName("singMetalSongs"), NO, NO);
+    NSLog(@"singMetalSongs方法 name = %s,types = %s", sel_getName(method3.name)  ,method3.types);
+}
+
+
+-(void)copyMethodDescriptionList {
+    Protocol* singProtocol = objc_getProtocol("SingProtocol");
+    unsigned int count1;
+    struct objc_method_description *methodList1 =   protocol_copyMethodDescriptionList(singProtocol, YES, YES, &count1);
+    NSLog(@"-----必要方法以及实例方法-----");
+    for (unsigned int i = 0; i < count1; i++) {
+        struct objc_method_description method = methodList1[i];
+        NSLog(@"name = %s,types = %s", sel_getName(method.name)  ,method.types);
+
+    }
+    free(methodList1);
+    
+    unsigned int count2;
+    struct objc_method_description *methodList2 =   protocol_copyMethodDescriptionList(singProtocol, YES, NO, &count2);
+    NSLog(@"-----必要方法以及类方法-----");
+    for (unsigned int i = 0; i < count2; i++) {
+        struct objc_method_description method = methodList2[i];
+        NSLog(@"name = %s,types = %s", sel_getName(method.name)  ,method.types);
+        
+    }
+    free(methodList2);
+
+    
+    unsigned int count3;
+    struct objc_method_description *methodList3 =   protocol_copyMethodDescriptionList(singProtocol, NO, NO, &count3);
+    NSLog(@"-----可选方法以及类方法-----");
+    for (unsigned int i = 0; i < count3; i++) {
+        struct objc_method_description method = methodList3[i];
+        NSLog(@"name = %s,types = %s", sel_getName(method.name)  ,method.types);
+        
+    }
+    free(methodList3);
+
+    
+    unsigned int count4;
+    struct objc_method_description *methodList4 =   protocol_copyMethodDescriptionList(singProtocol, NO, YES, &count4);
+    NSLog(@"-----可选方法以及实例方法-----");
+    for (unsigned int i = 0; i < count4; i++) {
+        struct objc_method_description method = methodList4[i];
+        NSLog(@"name = %s,types = %s", sel_getName(method.name)  ,method.types);
+        
+    }
+    free(methodList4);
+
+}
+
+-(void)getProperty_Protocol {
+    Protocol* singProtocol = objc_getProtocol("SingProtocol");
+    objc_property_t rockSongsProperty = protocol_getProperty(singProtocol, "rockSongs", YES, NO);
+    const char* rockSongsName = property_getName(rockSongsProperty);
+    NSLog(@"rockSongs 属性 name = %s",rockSongsName);
+    
+    objc_property_t folkSongsProperty = protocol_getProperty(singProtocol, "folkSongs", YES, YES);
+    const char* folkSongsName = property_getName(folkSongsProperty);
+    NSLog(@"folkSongs 属性 name = %s",folkSongsName);
+    
+    objc_property_t popularSongsProperty = protocol_getProperty(singProtocol, "popularSongs", YES, YES);
+    const char* popularSongsName = property_getName(popularSongsProperty);
+    NSLog(@"popularSongs 属性 name = %s",popularSongsName);
+    
+    objc_property_t metalSongsProperty = protocol_getProperty(singProtocol, "metalSongs", YES, NO);
+    const char* metalSongsName = property_getName(metalSongsProperty);
+    NSLog(@"metalSongs 属性 name = %s",metalSongsName);
+    
+}
+
+-(void)copyPropertyList_protocol {
+    Protocol* singProtocol = objc_getProtocol("SingProtocol");
+
+    NSLog(@"-----copyPropertyList------");
+    unsigned int count;
+    objc_property_t* propertyList = protocol_copyPropertyList(singProtocol, &count);
+    for (unsigned int i = 0; i < count; i++) {
+        objc_property_t property = propertyList[i];
+        NSLog(@"name = %s",property_getName(property));
+    }
+    free(propertyList);
+
+    NSLog(@"-----copyPropertyList2---instance propertys---");
+    unsigned int count2;
+    objc_property_t* propertyList2 = protocol_copyPropertyList2(singProtocol, &count2, YES, YES);
+    for (unsigned int i = 0; i < count2; i++) {
+        objc_property_t property = propertyList2[i];
+        NSLog(@"name = %s",property_getName(property));
+    }
+    free(propertyList2);
+    NSLog(@"-----copyPropertyList2---class propertys---");
+    unsigned int count3;
+    objc_property_t* propertyList3 = protocol_copyPropertyList2(singProtocol, &count3, YES, NO);
+    for (unsigned int i = 0; i < count3; i++) {
+        objc_property_t property = propertyList3[i];
+        NSLog(@"name = %s",property_getName(property));
+    }
+    free(propertyList3);
+}
+
+-(void)conformsToProtocol_class {
+    Protocol* playProtocol = objc_getProtocol("PlayProtocol");
+    Protocol* runProtocol = objc_getProtocol("RunProtocol");
+
+    BOOL isConforms = class_conformsToProtocol(objc_getClass("Person"), playProtocol);
+    BOOL isConforms2 = class_conformsToProtocol(objc_getClass("Person"), runProtocol);
+
+    NSLog(@"Person %@ PlayProtocol协议",isConforms?@"遵循":@"不遵循");
+    NSLog(@"Person %@ RunProtocol协议",isConforms2?@"遵循":@"不遵循");
+}
+
+
+-(void)copyProtocolList {
+    Protocol* eatProtocol = objc_getProtocol("EatProtocol");
+    unsigned int count;
+    __unsafe_unretained Protocol** protocolList = protocol_copyProtocolList(eatProtocol, &count);
+    
+    for (unsigned int i = 0; i < count ; i++) {
+        Protocol* protocol = protocolList[i];
+        NSLog(@"%s",protocol_getName(protocol));
+    }
+    
+    free(protocolList);
+}
+
+-(void)copyProtocolList_class {
+    Class class = objc_getClass("Person");
+    unsigned int count;
+    __unsafe_unretained Protocol** protocolList = class_copyProtocolList(class, &count);
+    for (unsigned int i = 0; i < count ; i++) {
+        Protocol* protocol = protocolList[i];
+        NSLog(@"%s",protocol_getName(protocol));
+    }
+    
+    free(protocolList);
+}
+
+-(void)copyProtocolList_objc {
+    unsigned int count;
+    __unsafe_unretained Protocol** protocolList = objc_copyProtocolList(&count);
+    for (unsigned int i = 0; i < count ; i++) {
+        Protocol* protocol = protocolList[i];
+        NSLog(@"%s",protocol_getName(protocol));
+    }
+    
+    free(protocolList);
+}
 @end
