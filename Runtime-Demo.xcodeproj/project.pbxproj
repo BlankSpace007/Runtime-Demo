@@ -26,6 +26,7 @@
 		A139FA5A22276F9600518534 /* SingProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SingProtocol.h; sourceTree = "<group>"; };
 		A139FA5B2227743A00518534 /* RunProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RunProtocol.h; sourceTree = "<group>"; };
 		A139FA5C2227B0E600518534 /* EatProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EatProtocol.h; sourceTree = "<group>"; };
+		A139FA5D2228C0EF00518534 /* DrinkProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrinkProtocol.h; sourceTree = "<group>"; };
 		A1746B83221D048A00524814 /* Runtime-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Runtime-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1746B86221D048A00524814 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A1746B87221D048A00524814 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -87,6 +88,7 @@
 				A139FA5A22276F9600518534 /* SingProtocol.h */,
 				A139FA5B2227743A00518534 /* RunProtocol.h */,
 				A139FA5C2227B0E600518534 /* EatProtocol.h */,
+				A139FA5D2228C0EF00518534 /* DrinkProtocol.h */,
 				A1746B86221D048A00524814 /* AppDelegate.h */,
 				A1746B87221D048A00524814 /* AppDelegate.m */,
 				A1746B89221D048A00524814 /* ViewController.h */,

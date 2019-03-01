@@ -2,3 +2,6 @@
 *.xcbkptlist
 *.xcuserstate
 .DS_Store
+*.pbxproj
+*.xcuserstate
+*.xcbkptlist

@@ -56,6 +56,7 @@
 //    [self getOffset];
 //    [self ivarLayout];
 //    [self addIvar];
+//    [self getIvarLayout];
     //test property
 //    [self getProperty];
 //    [self copyPropertyList];
@@ -63,7 +64,6 @@
 //    [self copyAttributeValue];
 //    [self addProperty];
 //    [self replaceProperty];
-//    [self getIvarLayout];
     //test protocol
 //    [self protocolCommen];
 //    [self conformsToProtocol];
@@ -76,7 +76,14 @@
 //    [self conformsToProtocol_class];
 //    [self copyProtocolList];
 //    [self copyProtocolList_class];
-    [self copyProtocolList_objc];
+//    [self copyProtocolList_objc];
+//    [self allocateProtocol];
+//    [self addMethodDescription1];
+//    [self addMethodDescription2];
+//    [self addProperty_protocol];
+//    [self addProtocol_protocol];
+    [self addProtocol_class];
+
 }
 
 #pragma mark - Class
@@ -452,6 +459,25 @@
     NSLog(@"size = %zu",class_getInstanceSize(objc_getClass("Dog")));
 }
 
+-(void)getIvarLayout {
+    const uint8_t *strongLayout =   class_getIvarLayout(objc_getClass("Lion"));
+    if (!strongLayout) {
+        return;
+    }
+    uint8_t byte;
+    while ((byte = *strongLayout++)) {
+        printf("strongLayout = #%02x\n",byte);
+    }
+    
+    const uint8_t *weakLayout =   class_getWeakIvarLayout(objc_getClass("Lion"));
+    if (!weakLayout) {
+        return;
+    }
+    while ((byte = *weakLayout++)) {
+        printf("weakLayout = #%02x\n",byte);
+    }
+}
+
 #pragma mark - property
 -(void)logProperty:(objc_property_t)property {
     NSLog(@"-------------------");
@@ -556,18 +582,7 @@
     
 }
 
--(void)getIvarLayout {
-   const uint8_t *strongLayout =   class_getIvarLayout(objc_getClass("Lion"));
-    uint8_t byte;
-    while ((byte = *strongLayout++)) {
-        printf("strongLayout = #%02x\n",byte);
-    }
-    
-    const uint8_t *weakLayout =   class_getWeakIvarLayout(objc_getClass("Lion"));
-    while ((byte = *weakLayout++)) {
-        printf("weakLayout = #%02x\n",byte);
-    }
-}
+
 #pragma mark - protocol
 -(void)protocolCommen {
     Protocol *protocol = objc_getProtocol("PlayProtocol");
@@ -765,5 +780,93 @@
     }
     
     free(protocolList);
+}
+
+-(void)allocateProtocol {
+    Protocol* protocol = objc_allocateProtocol("TestProtocol");
+    objc_registerProtocol(protocol);
+    NSLog(@"%s",protocol_getName(protocol));
+}
+
+-(void)addMethodDescription1 {
+    Protocol* eatProtocol = objc_getProtocol("EatProtocol");
+    SEL selector = sel_registerName("test");
+    const char* type = "v@:";
+    BOOL isRequiredMethod = YES;
+    BOOL isInstanceMethod = YES;
+    protocol_addMethodDescription(eatProtocol, selector, type, isRequiredMethod, isInstanceMethod);
+    
+    struct objc_method_description method =  protocol_getMethodDescription(eatProtocol, sel_registerName("test"), YES, YES);
+    NSLog(@"test方法 name = %s,types = %s", sel_getName(method.name)  ,method.types);
+}
+
+-(void)addMethodDescription2 {
+    Protocol* protocol = objc_allocateProtocol("TestProtocol");
+    
+    SEL selector = sel_registerName("test");
+    const char* type = "v@:";
+    BOOL isRequiredMethod = YES;
+    BOOL isInstanceMethod = YES;
+    protocol_addMethodDescription(protocol, selector, type, isRequiredMethod, isInstanceMethod);
+    objc_registerProtocol(protocol);
+
+    struct objc_method_description method =  protocol_getMethodDescription(protocol, sel_registerName("test"), YES, YES);
+    NSLog(@"test方法 name = %s,types = %s", sel_getName(method.name)  ,method.types);
+}
+
+-(void)addProperty_protocol {
+    Protocol* protocol = objc_allocateProtocol("TestProtocol");
+    const char* name = "juice";
+
+    unsigned int count = 5;
+    objc_property_attribute_t attributeList[count];
+    objc_property_attribute_t attribute1 ;
+    attribute1.name = "T";
+    attribute1.value = "NSString";
+    objc_property_attribute_t attribute2 ;
+    attribute2.name = "V";
+    attribute2.value = "_juice";
+    objc_property_attribute_t attribute3 ;
+    attribute3.name = "N";
+    attribute3.value = "";
+    objc_property_attribute_t attribute4 ;
+    attribute4.name = "C";
+    attribute4.value = "";
+    objc_property_attribute_t attribute5 ;
+    attribute5.name = "R";
+    attribute5.value = "";
+    attributeList[0] = attribute1;
+    attributeList[1] = attribute2;
+    attributeList[2] = attribute3;
+    attributeList[3] = attribute4;
+    attributeList[4] = attribute5;
+    
+    BOOL isRequiredProperty = YES;
+    BOOL isInstanceProperty = YES;
+    protocol_addProperty(protocol, name, (const objc_property_attribute_t*)attributeList, count, isRequiredProperty, isInstanceProperty);
+    objc_registerProtocol(protocol);
+
+    objc_property_t property = protocol_getProperty(protocol, "juice", YES, YES);
+
+    NSLog(@"name = %s",property_getName(property));
+}
+
+
+-(void)addProtocol_protocol {
+    Protocol* protocol = objc_allocateProtocol("TestProtocol");
+    Protocol* protocol2 = objc_getProtocol("SingProtocol");
+    protocol_addProtocol(protocol, protocol2);
+    objc_registerProtocol(protocol);
+    
+    BOOL isConform = protocol_conformsToProtocol(protocol, protocol2);
+    NSLog(@"isConform = %d",isConform);
+}
+
+-(void)addProtocol_class {
+    Protocol* protocol = objc_getProtocol("PlayProtocol");
+    Class class = objc_getClass("Cat");
+    class_addProtocol(class, protocol);
+    BOOL isConform = class_conformsToProtocol(class, protocol);
+    NSLog(@"isConform = %d",isConform);
 }
 @end
